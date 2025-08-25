@@ -1,0 +1,193 @@
+:root {
+  --color-primary: #63769b;
+  --color-white: #ffffff;
+  --spacing: 1rem;
+  --color-grey-lightest: #f2f2f2;
+  --color-black: #000000;
+  --transition-time: 0.3s;
+  --border: 1px solid var(--color-primary);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  line-height: 1.5;
+  font-family: Arial, sans-serif;
+  color: var(--color-black);
+}
+
+header,
+main,
+footer {
+  padding: 2rem;
+}
+
+a {
+  color: var(--color-primary);
+}
+a:hover,
+a:focus-visible {
+  text-decoration: none;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  transition: var(--transition-time);
+}
+
+h2 ~ h2 {
+  margin-block-start: 2rem;
+  padding-block-start: 2rem;
+  border-top: 1px solid var(--color-primary);
+}
+
+.bg {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.bg a {
+  color: #ffffff;
+}
+
+header nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header.bg nav a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  text-decoration: none;
+  border: 1px solid var(--color-primary);
+}
+header.bg nav a:hover,
+header.bg nav a:focus-visible {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-white);
+  transform: scale(1.01);
+}
+
+.impact {
+  padding: 0.15rem;
+  border: var(--border);
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+.impact--minor {
+  background-color: #f3ea00;
+}
+.impact--moderate {
+  background-color: #d4cd00;
+}
+.impact--serious {
+  background-color: #b36200;
+  color: var(--color-white);
+}
+.impact--critical {
+  color: var(--color-white);
+  background-color: #dc0000;
+}
+
+dialog::backdrop {
+  background-color: var(--color-primary);
+  opacity: 0.9;
+}
+
+dialog {
+  width: 90%;
+  height: 90%;
+  max-width: 900px;
+  max-height: 600px;
+  padding: 2rem;
+  background-color: var(--color-white);
+  border: var(--border);
+}
+
+.dialog-violations__close {
+  display: block;
+  margin-inline-start: auto;
+}
+
+.dialog-violations__title {
+  margin-block-start: 2rem;
+  padding-block-start: 1rem;
+  border-block-start: var(--border);
+}
+
+.dialog-violations__list {
+  padding-block-start: 2rem;
+  margin-block-start: 2rem;
+  border-block-start: var(--border);
+}
+
+.dialog-violations__list > li {
+  margin-block-end: 2rem;
+  padding-block-end: 2rem;
+  border-bottom: var(--border);
+}
+
+.dialog-violations__list > li li {
+  list-style-type: disc;
+  margin-block-start: 0.5rem;
+}
+
+button {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: var(--border);
+}
+button:focus-visible,
+button:hover {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.violations {
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 1rem;
+  overflow: auto;
+  background-color: var(--color-grey-lightest);
+  border: var(--border);
+}
+
+.violations__list > li {
+  margin-block-end: 1rem;
+}
+.violations__list > li li {
+  margin-block-start: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing);
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+#audit-form{
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid var(--color-primary);
+}
