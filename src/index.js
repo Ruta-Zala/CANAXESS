@@ -27,7 +27,6 @@ app.use(
 // Optional API key middleware (no-op if not set)
 function requireApiKey(req, res, next) {
   const expected = process.env.API_KEY;
-  console.log('expected', expected, req.header("x-api-key") );
   
   if (!expected) return next();
   const provided = req.header("x-api-key");
