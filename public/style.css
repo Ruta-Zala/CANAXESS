@@ -149,22 +149,17 @@ input[type="url"]:focus {
   opacity: 0.8;
 }
 
-.impact--minor {
+.impact--low {
   background-color: #fefcbf;
   color: #744210;
 }
 
-.impact--moderate {
+.impact--medium {
   background-color: #fbd38d;
   color: #7b341e;
 }
 
-.impact--serious {
-  background-color: #f56565;
-  color: var(--color-white);
-}
-
-.impact--critical {
+.impact--high {
   background-color: #9b2c2c;
   color: var(--color-white);
 }
@@ -291,6 +286,42 @@ dialog {
   width: 24px;
   height: 24px;
   animation: spin 1s linear infinite;
+}
+
+.json-container {
+  position: relative;
+  margin-bottom: var(--spacing);
+}
+
+.json-block {
+  background-color: var(--color-white);
+  padding: var(--spacing);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  font-family: monospace;
+  font-size: 0.9rem;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.copy-json {
+  position: absolute;
+  top: var(--spacing);
+  right: var(--spacing);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.copy-json:hover,
+.copy-json:focus-visible {
+  background-color: var(--color-secondary);
+}
+
+.copy-json:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @keyframes spin {

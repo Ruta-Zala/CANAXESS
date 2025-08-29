@@ -156,9 +156,54 @@ form.addEventListener("submit", async (event) => {
 
 // ---------------------- Render Report ----------------------
 
+function returnModifiedViolations(violations) {
+  return {
+    Low: violations
+      .filter((v) => v.impact === "low")
+      .map((v) => ({
+        url: v.url,
+        id: v.id,
+        impact: "Low",
+        description: v.description,
+        nodes: v.nodes.map((node) => ({
+          html: node.html,
+          target: node.target,
+          failureSummary: node.failureSummary,
+        })),
+      })),
+    Medium: violations
+      .filter((v) => v.impact === "medium")
+      .map((v) => ({
+        url: v.url,
+        id: v.id,
+        impact: "Medium",
+        description: v.description,
+        nodes: v.nodes.map((node) => ({
+          html: node.html,
+          target: node.target,
+          failureSummary: node.failureSummary,
+        })),
+      })),
+    High: violations
+      .filter((v) => v.impact === "high")
+      .map((v) => ({
+        url: v.url,
+        id: v.id,
+        impact: "High",
+        description: v.description,
+        nodes: v.nodes.map((node) => ({
+          html: node.html,
+          target: node.target,
+          failureSummary: node.failureSummary,
+        })),
+      })),
+  };
+}
+
 function renderReport(data) {
   const numberOfURLsTested = data?.numberOfURLsTested;
   const allViolations = data?.violations;
+  const inCompleteViolations = data?.inCompleteViolations || [];
   const summary = data?.summary;
   const numberOfViolations = allViolations.length;
 
@@ -181,15 +226,17 @@ function renderReport(data) {
   // Get unique URLs with violations
   const uniqueURLsWithViolations = [...new Set(summary)];
 
-  // Count the number of issues for each impact level
-  const impactCounts = allViolations.reduce((acc, violation) => {
-    const impact = violation.impact || "unknown";
-    if (!acc[impact]) {
-      acc[impact] = 0;
-    }
-    acc[impact] += 1;
-    return acc;
-  }, {});
+  // Prepare JSON for violations
+  const inCompleteViolationsJson = JSON.stringify(
+    returnModifiedViolations(inCompleteViolations),
+    null,
+    2
+  );
+  const completeViolationsJson = JSON.stringify(
+    returnModifiedViolations(allViolations),
+    null,
+    2
+  );
 
   // Set the content of the app element
   app.innerHTML = `
@@ -206,15 +253,32 @@ function renderReport(data) {
       <ul class="url-list">
         ${uniqueURLsWithViolations
           .map(
-            ({ url, totalViolations }) => `
+            ({ url, totalViolations, totalIncompleteViolations }) => `
           <li>
             <a href="${url}" target="_blank" rel="noopener">${url}</a>
             <div>Total Violations: ${totalViolations}</div>
+            <div>Total Incomplete Violations: ${totalIncompleteViolations}</div>
           </li>
         `
           )
           .join("")}
       </ul>
+    </section>
+
+    <section aria-labelledby="incomplete-json-output">
+      <h2 id="incomplete-json-output">InComplete Violations JSON Output</h2>
+      <div class="json-container">
+        <button class="copy-json" data-json-type="incomplete" aria-label="Copy Incomplete JSON to clipboard">Copy JSON</button>
+        <pre class="json-block">${escapeHtml(inCompleteViolationsJson)}</pre>
+      </div>
+    </section>
+
+    <section aria-labelledby="complete-json-output">
+      <h2 id="complete-json-output">Complete Violations JSON Output</h2>
+      <div class="json-container">
+        <button class="copy-json" data-json-type="complete" aria-label="Copy Complete JSON to clipboard">Copy JSON</button>
+        <pre class="json-block">${escapeHtml(completeViolationsJson)}</pre>
+      </div>
     </section>
 
     <section aria-labelledby="sites">
@@ -344,4 +408,26 @@ function renderReport(data) {
     .addEventListener("click", () => {
       document.querySelector(".dialog-violations").close();
     });
+
+  // Event listener for the copy JSON buttons
+  document.querySelectorAll(".copy-json").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      const jsonType = event.target.getAttribute("data-json-type");
+      const jsonToCopy =
+        jsonType === "complete"
+          ? completeViolationsJson
+          : inCompleteViolationsJson;
+      try {
+        await navigator.clipboard.writeText(jsonToCopy);
+        event.target.textContent = "Copied!";
+        event.target.disabled = true;
+        setTimeout(() => {
+          event.target.textContent = "Copy JSON";
+          event.target.disabled = false;
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to copy JSON:", err);
+      }
+    });
+  });
 }

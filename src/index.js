@@ -27,7 +27,7 @@ app.use(
 // Optional API key middleware (no-op if not set)
 function requireApiKey(req, res, next) {
   const expected = process.env.API_KEY;
-  
+
   if (!expected) return next();
   const provided = req.header("x-api-key");
   if (provided && provided === expected) return next();
@@ -143,6 +143,13 @@ const auditBodySchema = z.object({
     .default({}),
 });
 
+const violationImpact = {
+  minor: "low",
+  moderate: "medium",
+  serious: "high",
+  critical: "high",
+};
+
 // ------- Axe runner (main frame + same-origin iframes) -------
 async function runAxeOnPage(
   page,
@@ -226,6 +233,7 @@ app.post("/audit", requireApiKey, async (req, res, next) => {
 
     const browser = await getBrowser();
     const violations = [];
+    const inCompleteViolations = [];
     const summaries = [];
 
     for (const url of urls) {
@@ -314,7 +322,7 @@ app.post("/audit", requireApiKey, async (req, res, next) => {
             url: u.toString(),
             frameUrl: v.frameUrl,
             id: v.id,
-            impact: v.impact,
+            impact: violationImpact[v.impact],
             description: v.description,
             help: v.help,
             helpUrl: v.helpUrl,
@@ -325,7 +333,22 @@ app.post("/audit", requireApiKey, async (req, res, next) => {
             })),
           }))
         );
-
+        inCompleteViolations.push(
+          ...merged.incomplete.map((v) => ({
+            url: u.toString(),
+            frameUrl: v.frameUrl,
+            id: v.id,
+            impact: violationImpact[v.impact],
+            description: v.description,
+            help: v.help,
+            helpUrl: v.helpUrl,
+            nodes: v.nodes.map((node) => ({
+              html: node.html,
+              target: node.target,
+              failureSummary: node.failureSummary,
+            })),
+          }))
+        );
         await page.close().catch(() => {});
       } catch (err) {
         summaries.push({ url, error: err.message });
@@ -338,6 +361,7 @@ app.post("/audit", requireApiKey, async (req, res, next) => {
       timingsMs: { total: t1 - t0 },
       summary: summaries,
       violations,
+      inCompleteViolations,
       numberOfURLsTested: urls?.length,
     });
   } catch (err) {
