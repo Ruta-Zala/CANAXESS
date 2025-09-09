@@ -292,7 +292,7 @@ app.post("/audit", requireApiKey, async (req, res, next) => {
         // Navigate
         try {
           await page.goto(u.toString(), {
-            waitUntil: "networkidle2",
+            waitUntil: "domcontentloaded",
             timeout: navTimeout,
           });
         } catch (e) {
