@@ -130,9 +130,9 @@ form.addEventListener("submit", async (event) => {
 
   try {
     // Call audit API
-    const response = await fetch("http://localhost:8080/audit", {
+    const response = await fetch("https://canaxess.onrender.com/audit", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": "test" },
+      headers: { "Content-Type": "application/json", "x-api-key": "RPlVTP6Pd_8tmjiL2fp7Ch_0ZFge8Z3bB-QKQJcDVnQ" },
       body: JSON.stringify({ urls }),
     });
 
