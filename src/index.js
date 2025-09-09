@@ -6,9 +6,11 @@ import rateLimit from "express-rate-limit";
 import pino from "pino";
 import dns from "dns/promises";
 import net from "net";
-import puppeteer from "puppeteer";
 import axeCore from "axe-core";
 import "dotenv/config";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
+
 
 const logger = pino({ level: process.env.LOG_LEVEL || "info" });
 
@@ -101,22 +103,14 @@ let browser;
 async function getBrowser() {
   if (browser && browser.process() && !browser.isClosed?.()) return browser;
   browser = await puppeteer.launch({
-    headless: "new",
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--no-first-run",
-      "--no-zygote",
-      "--single-process",
-    ],
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless,
   });
-  browser.on("disconnected", () =>
-    logger.warn("Puppeteer browser disconnected")
-  );
   return browser;
 }
+
 
 // ------- Validation -------
 const auditBodySchema = z.object({
