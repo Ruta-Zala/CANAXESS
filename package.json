@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
-    "build": "echo 'no build step required'",
-    "postinstall": "npx puppeteer browsers install chrome"
+    "build": "echo 'no build step required'"
   },
   "dependencies": {
     "axe-core": "^4.10.0",
@@ -15,11 +14,9 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
+    "nodemon": "^3.1.10",
     "pino": "^9.4.0",
     "puppeteer": "^22.15.0",
     "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
   }
 }
