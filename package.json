@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "NODE_ENV=development nodemon src/index.js"
+    "dev": "NODE_ENV=development nodemon src/index.js",
+    "build": "echo 'no build step required'"
   },
   "dependencies": {
     "axe-core": "^4.10.0",
