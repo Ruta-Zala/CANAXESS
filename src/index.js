@@ -10,6 +10,8 @@ import axeCore from "axe-core";
 import "dotenv/config";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
+import { fileURLToPath } from "url";
+import path from 'path';
 
 
 const logger = pino({ level: process.env.LOG_LEVEL || "info" });
@@ -25,6 +27,20 @@ app.use(
       corsOrigin === "*" ? true : corsOrigin.split(",").map((s) => s.trim()),
   })
 );
+
+
+// Fix __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from "public"
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Default route → index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../index.html"));
+});
+
 
 // Optional API key middleware (no-op if not set)
 function requireApiKey(req, res, next) {
