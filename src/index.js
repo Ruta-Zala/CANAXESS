@@ -100,41 +100,24 @@ async function resolveAndCheckHost(hostname) {
 let browser;
 async function getBrowser() {
   if (browser && browser.process() && !browser.isClosed?.()) return browser;
-  
-  // Ensure cache dir is set (fallback to env or default)
-  if (!process.env.PUPPETEER_CACHE_DIR) {
-    process.env.PUPPETEER_CACHE_DIR = '/opt/render/.cache/puppeteer';
-  }
-  logger.info('Puppeteer cache dir:', process.env.PUPPETEER_CACHE_DIR);
-  
-  try {
-    const executablePath = puppeteer.executablePath();  // Resolves from cache
-    logger.info('Puppeteer executable path:', executablePath);
-    
-    browser = await puppeteer.launch({
-      headless: "new",
-      executablePath: executablePath,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--no-first-run",
-        "--no-zygote",
-        "--single-process",
-      ],
-    });
-    browser.on("disconnected", () =>
-      logger.warn("Puppeteer browser disconnected")
-    );
-    logger.info('Puppeteer browser launched successfully');
-    return browser;
-  } catch (error) {
-    logger.error('Failed to launch Puppeteer:', error.message);
-    // Graceful fallback or rethrow
-    throw new Error(`Puppeteer launch failed: ${error.message}`);
-  }
+  browser = await puppeteer.launch({
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process",
+    ],
+  });
+  browser.on("disconnected", () =>
+    logger.warn("Puppeteer browser disconnected")
+  );
+  return browser;
 }
+
 // ------- Validation -------
 const auditBodySchema = z.object({
   urls: z
