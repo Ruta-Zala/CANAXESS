@@ -1,0 +1,24 @@
+{
+  "name": "axe-accessibility-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "^138.0.2",
+    "axe-core": "^4.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "pino": "^9.4.0",
+    "puppeteer-core": "^24.19.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

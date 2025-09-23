@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Accessibility audit tool to analyze websites for WCAG compliance">
+  <link rel="stylesheet" href="/style.css">
+  <title>Accessibility Audit Tool</title>
+</head>
+<body>
+  <header class="bg">
+    <div class="container">
+      <h1>Accessibility Audit Tool</h1>
+    </div>
+  </header>
+  <main class="container">
+    <section aria-labelledby="form-heading">
+      <h2 id="form-heading">Run Accessibility Audit</h2>
+      <form id="audit-form">
+        <div id="url-inputs">
+          <div class="url-input-group">
+            <label for="url-0">Enter URL:</label>
+            <input type="url" id="url-0" name="url-0" placeholder="https://example.com" required aria-describedby="urls-help">
+            <button type="button" class="remove-url" aria-label="Remove URL" disabled>x</button>
+          </div>
+        </div>
+        <p id="urls-help" class="form-help">Enter a valid URL to audit for accessibility issues.</p>
+        <button type="submit" aria-label="Run accessibility audit">Run Audit</button>
+      </form>
+    </section>
+    <div id="app" aria-live="polite"></div>
+  </main>
+  <dialog class="dialog-violations" aria-labelledby="dialog-title">
+    <div class="dialog-header">
+      <h2 id="dialog-title">Violation Details</h2>
+      <button class="dialog-violations__close" aria-label="Close dialog">x</button>
+    </div>
+    <div class="dialog-violations__title"></div>
+    <ol class="dialog-violations__list"></ol>
+  </dialog>
+  <script src="/script.js"></script>
+</body>
+</html>
